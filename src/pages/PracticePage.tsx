@@ -1,77 +1,95 @@
-import Breadcrumb from "@/components/Breadcrumb";
-import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Brain, Code2, Headphones, BookOpen, Pen } from "lucide-react";
+import Breadcrumb from "@/components/Breadcrumb";
 
-const batchOptions = [
-  { count: "10", label: "Quick Review" },
-  { count: "20", label: "Recommended" },
-  { count: "50", label: "Deep Dive" },
-  { count: "ALL", label: "Full Course" },
+const levels = [1, 2, 3, 4, 5, 6];
+
+const practiceCards = [
+  { id: "flashcards", label: "FLASHCARDS", file: "VOCAB.EXE", icon: Brain, path: "vocabulary" },
+  { id: "grammar", label: "GRAMMAR", file: "RULES.SYS", icon: Code2, path: "grammar" },
+  { id: "listening", label: "LISTENING", file: "AUDIO.WAV", icon: Headphones, path: "listening" },
+  { id: "reading", label: "READING", file: "TEXT.DOC", icon: BookOpen, path: "reading" },
+  { id: "writing", label: "WRITING", file: "DRAW.BMP", icon: Pen, path: "writing" },
 ];
 
 const PracticePage = () => {
+  const [activeLevel, setActiveLevel] = useState(1);
+
   return (
-    <div className="max-w-5xl mx-auto">
-      <Breadcrumb items={[{ label: "Dashboard", to: "/" }, { label: "Practice", to: "/practice" }, { label: "HSK1" }, { label: "Flashcards" }]} />
+    <div className="max-w-6xl mx-auto">
+      <Breadcrumb items={[{ label: "Dashboard", to: "/" }, { label: "Practice" }]} />
 
-      {/* Back Button */}
-      <Link to="/" className="inline-flex items-center gap-2 mb-6 text-sm font-mono brutalist-border px-3 py-1.5 rounded bg-card hover:bg-muted transition-colors">
-        <ArrowLeft size={16} />
-        EXIT // BACK TO CENTER
-      </Link>
-
-      {/* Progress Bar */}
-      <div className="w-full h-2 bg-foreground rounded-full mb-12 brutalist-border" />
-
-      <div className="flex flex-col lg:flex-row gap-8 items-start justify-center">
-        {/* Left: Spaced Repetition Card */}
-        <div className="brutalist-card rounded-xl bg-card p-8 max-w-md w-full">
-          <h1 className="text-5xl font-bold italic bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent leading-tight">
-            SPACED
+      {/* Header with Level Selector */}
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <span className="retro-tag text-secondary border-secondary inline-block mb-2">
+            SYSTEM.BOOT // COLLECTION
+          </span>
+          <h1 className="text-5xl font-bold italic">
+            START <span className="text-primary">PRACTICE</span>
           </h1>
-          <h1 className="text-5xl font-bold italic bg-gradient-to-r from-primary to-gold bg-clip-text text-transparent leading-tight -mt-1">
-            REPETITION
-          </h1>
-
-          <div className="mt-4 inline-block retro-tag text-secondary border-secondary">
-            LEVEL: HSK1 // STATUS: READY
-          </div>
-
-          <div className="grid grid-cols-2 gap-0 mt-6 brutalist-border rounded-lg overflow-hidden">
-            <div className="p-4 bg-card border-r-2 border-foreground">
-              <p className="text-3xl font-bold font-mono">160</p>
-              <p className="text-xs font-mono text-primary uppercase mt-1">Total Words</p>
-            </div>
-            <div className="p-4 bg-card">
-              <p className="text-3xl font-bold font-mono">0%</p>
-              <p className="text-xs font-mono text-primary uppercase mt-1">Mastery</p>
-            </div>
-          </div>
         </div>
 
-        {/* Right: Start Session */}
-        <div className="bg-secondary brutalist-card rounded-xl p-6 max-w-sm w-full">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-3 h-3 rounded-full bg-primary animate-pulse-glow" />
-            <h2 className="font-mono font-bold text-lg text-secondary-foreground">START SESSION _</h2>
-          </div>
-
-          <p className="font-mono text-xs uppercase bg-foreground/10 text-secondary-foreground inline-block px-2 py-1 rounded mb-4">
-            Select Batch Size
-          </p>
-
-          <div className="grid grid-cols-2 gap-3">
-            {batchOptions.map((opt) => (
-              <button
-                key={opt.count}
-                className="brutalist-card bg-card rounded-lg p-4 text-left hover:bg-muted transition-colors"
-              >
-                <p className="text-2xl font-bold font-mono text-foreground">{opt.count}</p>
-                <p className="text-xs font-mono text-muted-foreground uppercase mt-1">{opt.label}</p>
-              </button>
-            ))}
-          </div>
+        {/* HSK Level Tabs */}
+        <div className="flex gap-0 brutalist-border rounded-lg overflow-hidden">
+          {levels.map((lv) => (
+            <button
+              key={lv}
+              onClick={() => setActiveLevel(lv)}
+              className={`px-4 py-2 text-xs font-mono font-bold transition-colors ${
+                activeLevel === lv
+                  ? "bg-primary text-primary-foreground"
+                  : lv === 6
+                    ? "bg-card text-muted-foreground opacity-50 cursor-not-allowed"
+                    : "bg-card text-foreground hover:bg-muted"
+              }`}
+              disabled={lv === 6}
+            >
+              HSK {lv}
+            </button>
+          ))}
         </div>
+      </div>
+
+      {/* Floppy Disk Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {practiceCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <Link
+              key={card.id}
+              to={`/course/hsk${activeLevel}/${card.path}`}
+              className="brutalist-card rounded-xl bg-card overflow-hidden hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all group"
+            >
+              {/* Floppy disk top */}
+              <div className="bg-muted px-4 py-2 flex items-center justify-between border-b-2 border-border">
+                <div className="flex items-center gap-2">
+                  <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[8px] border-b-foreground/30" />
+                </div>
+                <div className="w-8 h-5 bg-foreground/20 rounded-sm brutalist-border" />
+              </div>
+
+              {/* Label */}
+              <div className="px-3 py-1 flex items-center justify-between text-xs font-mono text-muted-foreground">
+                <span>VOL-{String(practiceCards.indexOf(card) + 1).padStart(2, "0")}</span>
+                <span>1.44 MB</span>
+              </div>
+
+              {/* Main content */}
+              <div className="bg-card-gold/30 p-6 flex flex-col items-center justify-center min-h-[120px]">
+                <Icon size={36} className="text-foreground/50 mb-2 group-hover:text-foreground/70 transition-colors" />
+                <p className="font-bold font-mono text-sm text-foreground/80">{card.label}</p>
+              </div>
+
+              {/* Bottom file label */}
+              <div className="px-3 py-2 flex items-center justify-between border-t-2 border-border">
+                <span className="text-xs font-mono bg-foreground/5 px-2 py-0.5 rounded text-foreground/60">{card.file}</span>
+                <div className="w-3 h-3 bg-foreground/20 rounded-sm" />
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

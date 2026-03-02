@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, BookOpen, Edit3, Headphones, Trophy, MessageCircle } from "lucide-react";
+import { LayoutDashboard, BookOpen, Edit3, Headphones, Trophy, MessageCircle, ClipboardList } from "lucide-react";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -8,7 +8,7 @@ const navItems = [
 const studyItems = [
   { to: "/course", icon: BookOpen, label: "Study" },
   { to: "/practice", icon: Edit3, label: "Practice" },
-  { to: "/listening", icon: Headphones, label: "Listening" },
+  { to: "/mock-test", icon: ClipboardList, label: "Mock Exams" },
 ];
 
 const socialItems = [
