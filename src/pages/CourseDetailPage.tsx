@@ -651,6 +651,25 @@ const CourseDetailPage = () => {
           </div>
         </div>
       )}
+
+      {/* Next / Previous Level Navigation */}
+      {hasData && (
+        <div className="flex items-center justify-between mt-8 mb-4 brutalist-card rounded-xl bg-card p-3">
+          {course.level > 1 ? (
+            <Link to={`/course/hsk${course.level - 1}`} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm font-mono">
+              <ChevronLeft size={14} />
+              ← HSK {course.level - 1}
+            </Link>
+          ) : <div />}
+          <span className="text-xs font-mono text-muted-foreground">Level {course.level} / 6</span>
+          {course.level < 6 ? (
+            <Link to={`/course/hsk${course.level + 1}`} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm font-mono">
+              HSK {course.level + 1} →
+              <ChevronRight size={14} />
+            </Link>
+          ) : <div />}
+        </div>
+      )}
     </div>
   );
 };
