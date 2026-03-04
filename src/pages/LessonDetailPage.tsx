@@ -2,7 +2,21 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useCallback, useMemo } from "react";
 import { ArrowLeft, Volume2, BookOpen, Headphones, Code2, Pen, Globe, Brain, Settings2, CheckCircle2, RotateCcw, ChevronLeft, ChevronRight, Shuffle, Eye, EyeOff } from "lucide-react";
 import Breadcrumb from "@/components/Breadcrumb";
-import { hsk1Lessons, type VocabWord } from "@/data/hsk1-lessons";
+import { hsk1Lessons, type VocabWord, type LessonData } from "@/data/hsk1-lessons";
+import { hsk2Lessons } from "@/data/hsk2-lessons";
+import { hsk3Lessons } from "@/data/hsk3-lessons";
+import { hsk4Lessons } from "@/data/hsk4-lessons";
+import { hsk5Lessons } from "@/data/hsk5-lessons";
+import { hsk6Lessons } from "@/data/hsk6-lessons";
+
+const hskLessonMap: Record<string, LessonData[]> = {
+  hsk1: hsk1Lessons,
+  hsk2: hsk2Lessons,
+  hsk3: hsk3Lessons,
+  hsk4: hsk4Lessons,
+  hsk5: hsk5Lessons,
+  hsk6: hsk6Lessons,
+};
 
 const tabs = [
   { id: "vocabulary", label: "Vocabulary", icon: BookOpen },
@@ -483,8 +497,10 @@ const LessonDetailPage = () => {
   const [showPinyin, setShowPinyin] = useState(true);
 
   const lessonNum = parseInt(lessonId || "1");
-  const lesson = hsk1Lessons.find(l => l.id === lessonNum) || hsk1Lessons[0];
+  const allLessons = hskLessonMap[level || "hsk1"] || hsk1Lessons;
+  const lesson = allLessons.find(l => l.id === lessonNum) || allLessons[0];
   const vocab = lesson.vocab;
+  const maxLesson = allLessons.length;
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -551,7 +567,7 @@ const LessonDetailPage = () => {
             <ChevronLeft size={14} /> Lesson {lessonNum - 1}
           </Link>
         ) : <div />}
-        {lessonNum < 15 ? (
+        {lessonNum < maxLesson ? (
           <Link to={`/course/${level}/lesson/${lessonNum + 1}`} className="retro-tag text-primary border-primary hover:bg-primary/10 transition-colors flex items-center gap-1">
             Lesson {lessonNum + 1} <ChevronRight size={14} />
           </Link>

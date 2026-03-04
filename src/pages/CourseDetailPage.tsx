@@ -3,6 +3,20 @@ import { useState, useCallback, useMemo } from "react";
 import { Volume2, BookOpen, Headphones, Code2, Pen, Globe, Brain, Settings2, CheckCircle2, RotateCcw, ChevronLeft, ChevronRight, Shuffle, Eye, EyeOff } from "lucide-react";
 import Breadcrumb from "@/components/Breadcrumb";
 import { hsk1Lessons, type VocabWord, type LessonData } from "@/data/hsk1-lessons";
+import { hsk2Lessons } from "@/data/hsk2-lessons";
+import { hsk3Lessons } from "@/data/hsk3-lessons";
+import { hsk4Lessons } from "@/data/hsk4-lessons";
+import { hsk5Lessons } from "@/data/hsk5-lessons";
+import { hsk6Lessons } from "@/data/hsk6-lessons";
+
+const hskLessonMap: Record<string, LessonData[]> = {
+  hsk1: hsk1Lessons,
+  hsk2: hsk2Lessons,
+  hsk3: hsk3Lessons,
+  hsk4: hsk4Lessons,
+  hsk5: hsk5Lessons,
+  hsk6: hsk6Lessons,
+};
 
 const contentTabs = [
   { id: "lessons", label: "Lessons", icon: BookOpen },
@@ -506,8 +520,7 @@ const CourseDetailPage = () => {
   const [activeTab, setActiveTab] = useState("lessons");
   const course = courseData[level || "hsk1"] || courseData.hsk1;
 
-  // For now only HSK1 has lesson data
-  const lessons = level === "hsk1" || !level ? hsk1Lessons : [];
+  const lessons = hskLessonMap[level || "hsk1"] || [];
   const hasData = lessons.length > 0;
 
   return (
