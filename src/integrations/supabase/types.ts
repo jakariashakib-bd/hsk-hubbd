@@ -14,6 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
+      dialogues: {
+        Row: {
+          chinese: string
+          english: string
+          id: string
+          lesson_id: string
+          pinyin: string
+          sort_order: number
+          speaker: string
+        }
+        Insert: {
+          chinese: string
+          english: string
+          id?: string
+          lesson_id: string
+          pinyin: string
+          sort_order?: number
+          speaker: string
+        }
+        Update: {
+          chinese?: string
+          english?: string
+          id?: string
+          lesson_id?: string
+          pinyin?: string
+          sort_order?: number
+          speaker?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dialogues_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "hsk_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exercises: {
+        Row: {
+          correct_answer: string
+          exercise_type: string
+          id: string
+          lesson_id: string
+          options: Json | null
+          question: string
+          sort_order: number
+        }
+        Insert: {
+          correct_answer: string
+          exercise_type: string
+          id?: string
+          lesson_id: string
+          options?: Json | null
+          question: string
+          sort_order?: number
+        }
+        Update: {
+          correct_answer?: string
+          exercise_type?: string
+          id?: string
+          lesson_id?: string
+          options?: Json | null
+          question?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercises_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "hsk_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      grammar_points: {
+        Row: {
+          example_chinese: string
+          example_english: string
+          example_pinyin: string
+          explanation: string
+          id: string
+          lesson_id: string
+          sort_order: number
+          structure: string
+        }
+        Insert: {
+          example_chinese: string
+          example_english: string
+          example_pinyin: string
+          explanation: string
+          id?: string
+          lesson_id: string
+          sort_order?: number
+          structure: string
+        }
+        Update: {
+          example_chinese?: string
+          example_english?: string
+          example_pinyin?: string
+          explanation?: string
+          id?: string
+          lesson_id?: string
+          sort_order?: number
+          structure?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grammar_points_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "hsk_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hsk_lessons: {
+        Row: {
+          created_at: string
+          id: string
+          lesson_number: number
+          level: number
+          title_chinese: string
+          title_english: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lesson_number: number
+          level: number
+          title_chinese: string
+          title_english: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lesson_number?: number
+          level?: number
+          title_chinese?: string
+          title_english?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -44,6 +188,38 @@ export type Database = {
         }
         Relationships: []
       }
+      reading_practice: {
+        Row: {
+          chinese: string
+          english: string
+          id: string
+          lesson_id: string
+          pinyin: string
+        }
+        Insert: {
+          chinese: string
+          english: string
+          id?: string
+          lesson_id: string
+          pinyin: string
+        }
+        Update: {
+          chinese?: string
+          english?: string
+          id?: string
+          lesson_id?: string
+          pinyin?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reading_practice_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "hsk_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -61,6 +237,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      vocabulary: {
+        Row: {
+          chinese: string
+          english: string
+          id: string
+          lesson_id: string
+          pinyin: string
+          sort_order: number
+          word_type: string
+        }
+        Insert: {
+          chinese: string
+          english: string
+          id?: string
+          lesson_id: string
+          pinyin: string
+          sort_order?: number
+          word_type?: string
+        }
+        Update: {
+          chinese?: string
+          english?: string
+          id?: string
+          lesson_id?: string
+          pinyin?: string
+          sort_order?: number
+          word_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vocabulary_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "hsk_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
