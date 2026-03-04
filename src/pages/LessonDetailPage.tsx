@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useCallback, useMemo } from "react";
 import { ArrowLeft, Volume2, BookOpen, Headphones, Code2, Pen, Globe, Brain, Settings2, CheckCircle2, RotateCcw, ChevronLeft, ChevronRight, Shuffle, Eye, EyeOff } from "lucide-react";
+import { useCompletedLessons } from "@/hooks/useCompletedLessons";
 import Breadcrumb from "@/components/Breadcrumb";
 import { hsk1Lessons, type VocabWord, type LessonData } from "@/data/hsk1-lessons";
 import { hsk2Lessons } from "@/data/hsk2-lessons";
@@ -491,16 +492,45 @@ const ExercisesTab = ({ vocab }: { vocab: VocabWord[] }) => {
 
 // ====== MAIN PAGE ======
 
+const TabScrollNav = ({ activeTab, setActiveTab, tabsList }: { activeTab: string; setActiveTab: (t: string) => void; tabsList: { id: string; label: string; icon: any }[] }) => {
+  const currentIndex = tabsList.findIndex(t => t.id === activeTab);
+  const prev = currentIndex > 0 ? tabsList[currentIndex - 1] : null;
+  const next = currentIndex < tabsList.length - 1 ? tabsList[currentIndex + 1] : null;
+
+  return (
+    <div className="flex items-center justify-between mt-8 mb-4 brutalist-card rounded-xl bg-card p-3">
+      {prev ? (
+        <button onClick={() => setActiveTab(prev.id)} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm font-mono">
+          <ChevronLeft size={14} />
+          <prev.icon size={14} className="text-primary" />
+          {prev.label}
+        </button>
+      ) : <div />}
+      <span className="text-xs font-mono text-muted-foreground">{currentIndex + 1} / {tabsList.length}</span>
+      {next ? (
+        <button onClick={() => setActiveTab(next.id)} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm font-mono">
+          <next.icon size={14} className="text-primary" />
+          {next.label}
+          <ChevronRight size={14} />
+        </button>
+      ) : <div />}
+    </div>
+  );
+};
+
 const LessonDetailPage = () => {
   const { level, lessonId } = useParams();
   const [activeTab, setActiveTab] = useState("vocabulary");
   const [showPinyin, setShowPinyin] = useState(true);
+  const { isCompleted, toggleComplete } = useCompletedLessons();
 
+  const lvl = level || "hsk1";
   const lessonNum = parseInt(lessonId || "1");
-  const allLessons = hskLessonMap[level || "hsk1"] || hsk1Lessons;
+  const allLessons = hskLessonMap[lvl] || hsk1Lessons;
   const lesson = allLessons.find(l => l.id === lessonNum) || allLessons[0];
   const vocab = lesson.vocab;
   const maxLesson = allLessons.length;
+  const completed = isCompleted(lvl, lessonNum);
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -508,7 +538,7 @@ const LessonDetailPage = () => {
         items={[
           { label: "Dashboard", to: "/" },
           { label: "Study", to: "/course" },
-          { label: (level || "hsk1").toUpperCase(), to: `/course/${level}` },
+          { label: lvl.toUpperCase(), to: `/course/${level}` },
           { label: "LESSON" },
           { label: lessonId || "1" },
         ]}
@@ -523,8 +553,15 @@ const LessonDetailPage = () => {
           <p className="font-bold font-mono text-lg">第{lessonId}课</p>
           <p className="text-xs text-muted-foreground font-mono">{lesson.chinese} - {lesson.english.toUpperCase()}</p>
         </div>
-        <button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg font-mono text-xs font-bold brutalist-border flex items-center gap-1.5 hover:opacity-90 transition-opacity">
-          <CheckCircle2 size={14} /> Mark Complete
+        <button
+          onClick={() => toggleComplete(lvl, lessonNum)}
+          className={`px-4 py-2 rounded-lg font-mono text-xs font-bold brutalist-border flex items-center gap-1.5 hover:opacity-90 transition-all ${
+            completed
+              ? "bg-green-500 text-white border-green-600"
+              : "bg-secondary text-secondary-foreground"
+          }`}
+        >
+          <CheckCircle2 size={14} /> {completed ? "✓ Completed" : "Mark Complete"}
         </button>
       </div>
 
@@ -560,8 +597,11 @@ const LessonDetailPage = () => {
       {activeTab === "flashcards" && <FlashcardsTab vocab={vocab} />}
       {activeTab === "exercises" && <ExercisesTab vocab={vocab} />}
 
-      {/* Navigation */}
-      <div className="flex items-center justify-between mt-8 mb-4">
+      {/* Tab Scroll Navigation */}
+      <TabScrollNav activeTab={activeTab} setActiveTab={setActiveTab} tabsList={tabs} />
+
+      {/* Lesson Navigation */}
+      <div className="flex items-center justify-between mt-4 mb-4">
         {lessonNum > 1 ? (
           <Link to={`/course/${level}/lesson/${lessonNum - 1}`} className="retro-tag text-primary border-primary hover:bg-primary/10 transition-colors flex items-center gap-1">
             <ChevronLeft size={14} /> Lesson {lessonNum - 1}

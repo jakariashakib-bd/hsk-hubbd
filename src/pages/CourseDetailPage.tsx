@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useCallback, useMemo } from "react";
 import { Volume2, BookOpen, Headphones, Code2, Pen, Globe, Brain, Settings2, CheckCircle2, RotateCcw, ChevronLeft, ChevronRight, Shuffle, Eye, EyeOff } from "lucide-react";
 import Breadcrumb from "@/components/Breadcrumb";
+import { useCompletedLessons } from "@/hooks/useCompletedLessons";
 import { hsk1Lessons, type VocabWord, type LessonData } from "@/data/hsk1-lessons";
 import { hsk2Lessons } from "@/data/hsk2-lessons";
 import { hsk3Lessons } from "@/data/hsk3-lessons";
@@ -48,39 +49,60 @@ const courseData: Record<string, { level: number; label: string; color: string; 
 };
 
 // ====== LESSONS TAB (default curriculum view) ======
-const LessonsTab = ({ lessons, level }: { lessons: LessonData[]; level: string }) => (
-  <div>
-    <div className="flex items-center justify-between mb-4">
-      <h2 className="font-bold text-lg flex items-center gap-2">
-        <BookOpen size={20} className="text-primary" /> Course Curriculum
-      </h2>
-      <span className="text-sm text-muted-foreground font-mono">0 / {lessons.length} Completed</span>
+const LessonsTab = ({ lessons, level }: { lessons: LessonData[]; level: string }) => {
+  const { isCompleted, toggleComplete, completedCount } = useCompletedLessons();
+  const done = completedCount(level, lessons.length);
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-bold text-lg flex items-center gap-2">
+          <BookOpen size={20} className="text-primary" /> Course Curriculum
+        </h2>
+        <span className="text-sm text-muted-foreground font-mono">{done} / {lessons.length} Completed</span>
+      </div>
+      <div className="space-y-3">
+        {lessons.map((lesson) => {
+          const completed = isCompleted(level, lesson.id);
+          return (
+            <div key={lesson.id} className="brutalist-card rounded-xl bg-card flex items-center gap-0 hover:bg-muted transition-colors group">
+              <Link
+                to={`/course/${level}/lesson/${lesson.id}`}
+                className="flex-1 p-5 flex items-center gap-4 min-w-0"
+              >
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold font-mono text-sm brutalist-border shrink-0 ${
+                  completed ? "bg-green-500 text-white border-green-600" : "bg-primary/10 text-primary"
+                }`}>
+                  {completed ? <CheckCircle2 size={18} /> : lesson.id}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm">
+                    <span className={completed ? "text-muted-foreground line-through" : "text-foreground/80"}>{lesson.chinese}</span>
+                    <span className="text-muted-foreground ml-2">{lesson.english}</span>
+                  </p>
+                  <p className="text-xs font-mono text-muted-foreground uppercase mt-1">
+                    {lesson.vocab.length} WORDS {completed && "• ✓ DONE"}
+                  </p>
+                </div>
+                <span className="text-primary opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+              </Link>
+              <button
+                onClick={(e) => { e.preventDefault(); toggleComplete(level, lesson.id); }}
+                className={`mr-3 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all shrink-0 ${
+                  completed
+                    ? "bg-green-500/10 text-green-600 hover:bg-green-500/20"
+                    : "bg-muted hover:bg-foreground/10 text-muted-foreground"
+                }`}
+              >
+                {completed ? "✓" : "○"}
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
-    <div className="space-y-3">
-      {lessons.map((lesson) => (
-        <Link
-          key={lesson.id}
-          to={`/course/${level}/lesson/${lesson.id}`}
-          className="brutalist-card rounded-xl bg-card p-5 flex items-center gap-4 hover:bg-muted transition-colors group"
-        >
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary font-mono text-sm brutalist-border shrink-0">
-            {lesson.id}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-bold text-sm">
-              <span className="text-foreground/80">{lesson.chinese}</span>
-              <span className="text-muted-foreground ml-2">{lesson.english}</span>
-            </p>
-            <p className="text-xs font-mono text-muted-foreground uppercase mt-1">
-              {lesson.vocab.length} WORDS
-            </p>
-          </div>
-          <span className="text-primary opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-        </Link>
-      ))}
-    </div>
-  </div>
-);
+  );
+};
 
 // ====== VOCABULARY TAB - all lessons ======
 const AllVocabularyTab = ({ lessons, level }: { lessons: LessonData[]; level: string }) => {
@@ -572,6 +594,36 @@ const CourseDetailPage = () => {
           {activeTab === "culture" && <AllCultureTab lessons={lessons} />}
           {activeTab === "flashcards" && <AllFlashcardsTab lessons={lessons} />}
           {activeTab === "exercises" && <AllExercisesTab lessons={lessons} />}
+
+          {/* Tab Scroll Navigation */}
+          {activeTab !== "lessons" && (
+            <div className="flex items-center justify-between mt-8 mb-4 brutalist-card rounded-xl bg-card p-3">
+              {(() => {
+                const idx = contentTabs.findIndex(t => t.id === activeTab);
+                const prev = idx > 0 ? contentTabs[idx - 1] : null;
+                const next = idx < contentTabs.length - 1 ? contentTabs[idx + 1] : null;
+                return (
+                  <>
+                    {prev ? (
+                      <button onClick={() => setActiveTab(prev.id)} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm font-mono">
+                        <ChevronLeft size={14} />
+                        <prev.icon size={14} className="text-primary" />
+                        {prev.label}
+                      </button>
+                    ) : <div />}
+                    <span className="text-xs font-mono text-muted-foreground">{idx + 1} / {contentTabs.length}</span>
+                    {next ? (
+                      <button onClick={() => setActiveTab(next.id)} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm font-mono">
+                        <next.icon size={14} className="text-primary" />
+                        {next.label}
+                        <ChevronRight size={14} />
+                      </button>
+                    ) : <div />}
+                  </>
+                );
+              })()}
+            </div>
+          )}
         </>
       )}
 
