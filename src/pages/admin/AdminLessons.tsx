@@ -6,14 +6,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BookOpen, Plus, Edit3, Trash2, Eye } from 'lucide-react';
 import { hsk1Lessons } from '@/data/hsk1-lessons';
+import { hsk2Lessons } from '@/data/hsk2-lessons';
+import { hsk3Lessons } from '@/data/hsk3-lessons';
+import { hsk4Lessons } from '@/data/hsk4-lessons';
+import { hsk5Lessons } from '@/data/hsk5-lessons';
+import { hsk6Lessons } from '@/data/hsk6-lessons';
 
 const hskLevels = [1, 2, 3, 4, 5, 6];
+const hskLessonMap: Record<string, typeof hsk1Lessons> = {
+  '1': hsk1Lessons, '2': hsk2Lessons, '3': hsk3Lessons,
+  '4': hsk4Lessons, '5': hsk5Lessons, '6': hsk6Lessons,
+};
 
 const AdminLessons = () => {
   const [activeLevel, setActiveLevel] = useState('1');
   const [search, setSearch] = useState('');
 
-  const lessons = activeLevel === '1' ? hsk1Lessons : [];
+  const lessons = hskLessonMap[activeLevel] || [];
   const filtered = lessons.filter((l) =>
     l.english.toLowerCase().includes(search.toLowerCase()) || l.chinese.includes(search)
   );
@@ -52,7 +61,7 @@ const AdminLessons = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {level === 1 ? (
+                  {String(level) === activeLevel && filtered.length > 0 ? (
                     filtered.map((lesson) => (
                       <TableRow key={lesson.id}>
                         <TableCell className="font-mono">{lesson.id}</TableCell>
@@ -68,9 +77,9 @@ const AdminLessons = () => {
                         </TableCell>
                       </TableRow>
                     ))
-                  ) : (
-                    <TableRow><TableCell colSpan={5} className="text-center py-8 text-muted-foreground font-mono">HSK {level} lessons coming soon</TableCell></TableRow>
-                  )}
+                  ) : String(level) === activeLevel ? (
+                    <TableRow><TableCell colSpan={5} className="text-center py-8 text-muted-foreground font-mono">No lessons found</TableCell></TableRow>
+                  ) : null}
                 </TableBody>
               </Table>
             </div>

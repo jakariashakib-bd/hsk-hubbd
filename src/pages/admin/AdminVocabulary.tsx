@@ -6,14 +6,22 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ClipboardList, Plus, Edit3, Trash2, Volume2 } from 'lucide-react';
 import { hsk1Lessons } from '@/data/hsk1-lessons';
+import { hsk2Lessons } from '@/data/hsk2-lessons';
+import { hsk3Lessons } from '@/data/hsk3-lessons';
+import { hsk4Lessons } from '@/data/hsk4-lessons';
+import { hsk5Lessons } from '@/data/hsk5-lessons';
+import { hsk6Lessons } from '@/data/hsk6-lessons';
+
+const hskLessonMap: Record<string, typeof hsk1Lessons> = {
+  '1': hsk1Lessons, '2': hsk2Lessons, '3': hsk3Lessons,
+  '4': hsk4Lessons, '5': hsk5Lessons, '6': hsk6Lessons,
+};
 
 const AdminVocabulary = () => {
   const [search, setSearch] = useState('');
   const [activeLevel, setActiveLevel] = useState('1');
 
-  const allWords = activeLevel === '1'
-    ? hsk1Lessons.flatMap((l) => l.vocab.map((v) => ({ ...v, lesson: `${l.chinese} - ${l.english}` })))
-    : [];
+  const allWords = (hskLessonMap[activeLevel] || []).flatMap((l) => l.vocab.map((v) => ({ ...v, lesson: `${l.chinese} - ${l.english}` })));
 
   const filtered = allWords.filter(
     (w) => w.chinese.includes(search) || w.pinyin.toLowerCase().includes(search.toLowerCase()) || w.english.toLowerCase().includes(search.toLowerCase())
