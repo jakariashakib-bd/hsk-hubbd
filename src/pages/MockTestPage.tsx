@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, Clock, HelpCircle } from "lucide-react";
+import { CheckCircle2, Clock, HelpCircle, Lock } from "lucide-react";
 import Breadcrumb from "@/components/Breadcrumb";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import UpgradeModal from "@/components/UpgradeModal";
 
 const exams = [
   { level: 1, label: "Beginner", color: "bg-card-mint", icon: "🏯", time: "40 mins", questions: 40 },
@@ -12,6 +15,10 @@ const exams = [
 ];
 
 const MockTestPage = () => {
+  const { canAccessMockTests } = useUserPlan();
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const isLocked = !canAccessMockTests();
+
   return (
     <div className="max-w-6xl mx-auto">
       <Breadcrumb items={[{ label: "Dashboard", to: "/" }, { label: "Mock Exams" }]} />
@@ -41,10 +48,27 @@ const MockTestPage = () => {
         </div>
       </div>
 
+      {/* Locked banner for free users */}
+      {isLocked && (
+        <div className="brutalist-card rounded-xl bg-primary/5 p-6 mb-8 text-center">
+          <Lock size={32} className="mx-auto text-primary mb-3" />
+          <h3 className="text-lg font-bold mb-1">Premium Feature</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Upgrade to Pro to unlock all mock test exams.
+          </p>
+          <button
+            onClick={() => setShowUpgrade(true)}
+            className="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-bold text-sm brutalist-border hover:opacity-90 transition-opacity"
+          >
+            Upgrade to Pro
+          </button>
+        </div>
+      )}
+
       {/* Scrolling ticker */}
       <div className="bg-foreground text-primary-foreground py-2 brutalist-border overflow-hidden mb-10">
         <div className="animate-marquee whitespace-nowrap font-mono text-xs tracking-widest">
-          *** EXAM PREPARATION *** MOCK TESTS LEVEL 1-5 *** HANYU SHUIPING KAOSHI *** EXAM PREPARATION *** MOCK TESTS LEVEL 1-5 *** HANYU SHUIPING KAOSHI *** EXAM PREPARATION *** MOCK TESTS LEVEL 1-5 ***
+          *** EXAM PREPARATION *** MOCK TESTS LEVEL 1-6 *** HANYU SHUIPING KAOSHI *** EXAM PREPARATION *** MOCK TESTS LEVEL 1-6 *** HANYU SHUIPING KAOSHI *** EXAM PREPARATION *** MOCK TESTS LEVEL 1-6 ***
         </div>
       </div>
 
@@ -53,8 +77,13 @@ const MockTestPage = () => {
         {exams.map((exam) => (
           <div
             key={exam.level}
-            className={`${exam.color} brutalist-card rounded-2xl p-5 flex flex-col min-h-[300px]`}
+            className={`${exam.color} brutalist-card rounded-2xl p-5 flex flex-col min-h-[300px] relative ${isLocked ? "opacity-50" : ""}`}
           >
+            {isLocked && (
+              <div className="absolute inset-0 rounded-2xl flex items-center justify-center z-10">
+                <Lock size={28} className="text-foreground/40" />
+              </div>
+            )}
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-3xl font-bold text-foreground/80 font-mono">HSK{exam.level}</h2>
@@ -69,7 +98,7 @@ const MockTestPage = () => {
 
             <div className="flex-1 flex items-center justify-center my-4">
               <div className="w-16 h-16 bg-card brutalist-border rounded-xl flex items-center justify-center">
-                <span className="text-3xl">{exam.icon}</span>
+                <span className="text-3xl">{isLocked ? "🔒" : exam.icon}</span>
               </div>
             </div>
 
@@ -78,15 +107,26 @@ const MockTestPage = () => {
               <span className="flex items-center gap-1"><HelpCircle size={12} /> {exam.questions} Q</span>
             </div>
 
-            <Link
-              to={`/mock-test/${exam.level}`}
-              className="block text-center bg-card text-foreground font-bold text-sm py-2.5 rounded-lg brutalist-border hover:bg-muted transition-colors"
-            >
-              Start Exam
-            </Link>
+            {isLocked ? (
+              <button
+                onClick={() => setShowUpgrade(true)}
+                className="block text-center bg-card text-foreground font-bold text-sm py-2.5 rounded-lg brutalist-border hover:bg-muted transition-colors"
+              >
+                🔒 Unlock
+              </button>
+            ) : (
+              <Link
+                to={`/mock-test/${exam.level}`}
+                className="block text-center bg-card text-foreground font-bold text-sm py-2.5 rounded-lg brutalist-border hover:bg-muted transition-colors"
+              >
+                Start Exam
+              </Link>
+            )}
           </div>
         ))}
       </div>
+
+      <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} />
     </div>
   );
 };

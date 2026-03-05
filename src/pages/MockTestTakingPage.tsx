@@ -9,8 +9,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import {
   Clock, CheckCircle2, XCircle, ArrowRight, ArrowLeft,
-  Trophy, RotateCcw, Home, Volume2, BookOpen, Target, AlertTriangle, PenTool,
+  Trophy, RotateCcw, Home, Volume2, BookOpen, Target, AlertTriangle, PenTool, Lock,
 } from "lucide-react";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import UpgradeModal from "@/components/UpgradeModal";
 
 /* ─── Types ─── */
 interface Question {
@@ -64,6 +66,9 @@ const MockTestTakingPage = () => {
   const navigate = useNavigate();
   const lvl = Number(level) || 1;
   const config = EXAM_CONFIGS[lvl] || EXAM_CONFIGS[1];
+  const { canAccessMockTests } = useUserPlan();
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const isLocked = !canAccessMockTests();
 
   const [phase, setPhase] = useState<"intro" | "test" | "result">("intro");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -161,6 +166,22 @@ const MockTestTakingPage = () => {
   const progressPct = totalQuestions ? (answeredCount / totalQuestions) * 100 : 0;
   const isUrgent = timeLeft < 120;
   const q = questions[current];
+
+  /* ─── LOCKED ─── */
+  if (isLocked) {
+    return (
+      <div className="max-w-3xl mx-auto">
+        <Breadcrumb items={[{ label: "Dashboard", to: "/" }, { label: "Mock Exams", to: "/mock-test" }, { label: config.label }]} />
+        <div className="brutalist-card rounded-2xl bg-card p-12 mt-6 text-center">
+          <Lock size={48} className="mx-auto text-primary mb-4" />
+          <h1 className="text-3xl font-bold mb-2">Mock Tests — Locked</h1>
+          <p className="text-muted-foreground mb-6">Upgrade to Pro to access all mock test exams.</p>
+          <Button onClick={() => setShowUpgrade(true)} className="brutalist-border px-8 py-3 font-bold">Upgrade to Pro</Button>
+        </div>
+        <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} />
+      </div>
+    );
+  }
 
   /* ─── INTRO ─── */
   if (phase === "intro") {
