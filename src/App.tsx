@@ -14,6 +14,7 @@ import VocabularyPage from "./pages/VocabularyPage";
 import ListeningPage from "./pages/ListeningPage";
 import ProgressPage from "./pages/ProgressPage";
 import CommunityPage from "./pages/CommunityPage";
+import PinyinDictionaryPage from "./pages/PinyinDictionaryPage";
 import MockTestPage from "./pages/MockTestPage";
 import AuthPage from "./pages/AuthPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="/listening" element={<ListeningPage />} />
               <Route path="/progress" element={<ProgressPage />} />
               <Route path="/community" element={<CommunityPage />} />
+              <Route path="/pinyin-dictionary" element={<PinyinDictionaryPage />} />
               <Route path="/mock-test" element={<MockTestPage />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
