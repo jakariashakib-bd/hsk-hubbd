@@ -44,11 +44,11 @@ const AppSidebar = () => {
 
   return (
     <aside className="w-56 min-h-screen bg-primary flex flex-col p-4 fixed left-0 top-0 z-40">
-      <div className="flex items-center justify-center px-2 py-4 mb-4">
+      <div className="flex items-center justify-center px-2 py-4 mb-4 bg-sidebar-foreground rounded-lg">
         <img
           src={hskhubLogo}
           alt="HSK Hub"
-          className="h-10 w-auto brightness-0 invert"
+          className="h-8 w-auto"
         />
       </div>
 
