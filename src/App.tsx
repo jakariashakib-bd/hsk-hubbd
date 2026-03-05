@@ -16,6 +16,7 @@ import ProgressPage from "./pages/ProgressPage";
 import CommunityPage from "./pages/CommunityPage";
 import PinyinDictionaryPage from "./pages/PinyinDictionaryPage";
 import MockTestPage from "./pages/MockTestPage";
+import MockTestTakingPage from "./pages/MockTestTakingPage";
 import AuthPage from "./pages/AuthPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="/community" element={<CommunityPage />} />
               <Route path="/pinyin-dictionary" element={<PinyinDictionaryPage />} />
               <Route path="/mock-test" element={<MockTestPage />} />
+              <Route path="/mock-test/:level" element={<MockTestTakingPage />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
               <Route path="/admin/users" element={<AdminGuard><AdminUsers /></AdminGuard>} />
