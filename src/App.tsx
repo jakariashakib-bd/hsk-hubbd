@@ -24,6 +24,7 @@ import AdminLessons from "./pages/admin/AdminLessons";
 import AdminVocabulary from "./pages/admin/AdminVocabulary";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminMockTests from "./pages/admin/AdminMockTests";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import AdminGuard from "./components/AdminGuard";
 import PricingPage from "./pages/PricingPage";
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="/admin/lessons" element={<AdminGuard><AdminLessons /></AdminGuard>} />
               <Route path="/admin/vocabulary" element={<AdminGuard><AdminVocabulary /></AdminGuard>} />
               <Route path="/admin/analytics" element={<AdminGuard><AdminAnalytics /></AdminGuard>} />
+              <Route path="/admin/mock-tests" element={<AdminGuard><AdminMockTests /></AdminGuard>} />
               <Route path="/admin/settings" element={<AdminGuard><AdminSettings /></AdminGuard>} />
             </Route>
             <Route path="*" element={<NotFound />} />

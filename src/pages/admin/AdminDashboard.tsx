@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
-import { Users, BookOpen, ClipboardList, BarChart3, Settings, Shield } from 'lucide-react';
+import { Users, BookOpen, ClipboardList, BarChart3, Settings, Shield, FileQuestion, Crown } from 'lucide-react';
 import Breadcrumb from '@/components/Breadcrumb';
 
 const adminCards = [
-  { to: '/admin/users', icon: Users, label: 'Users', desc: 'Manage all users & roles', color: 'bg-card-mint' },
+  { to: '/admin/users', icon: Users, label: 'Users & Plans', desc: 'Manage users, roles & plans', color: 'bg-card-mint' },
   { to: '/admin/lessons', icon: BookOpen, label: 'Lessons', desc: 'Add/edit HSK lessons', color: 'bg-card-salmon' },
   { to: '/admin/vocabulary', icon: ClipboardList, label: 'Vocabulary', desc: 'Manage word database', color: 'bg-card-gold' },
-  { to: '/admin/analytics', icon: BarChart3, label: 'Analytics', desc: 'Site stats & usage', color: 'bg-card-teal' },
-  { to: '/admin/settings', icon: Settings, label: 'Settings', desc: 'App configuration', color: 'bg-card-purple' },
+  { to: '/admin/mock-tests', icon: FileQuestion, label: 'Mock Tests', desc: 'Manage mock test questions', color: 'bg-card-teal' },
+  { to: '/admin/analytics', icon: BarChart3, label: 'Analytics', desc: 'Site stats & usage', color: 'bg-card-purple' },
+  { to: '/admin/settings', icon: Settings, label: 'Settings', desc: 'App configuration', color: 'bg-card-mint' },
 ];
 
 const AdminDashboard = () => {
