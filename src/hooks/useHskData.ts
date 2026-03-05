@@ -19,7 +19,7 @@ export const useHskLessons = (level: number) => {
       const lessonIds = lessons.map((l) => l.id);
       const { data: vocab, error: vocabError } = await supabase
         .from("vocabulary")
-        .select("lesson_id, chinese, pinyin, english, word_type, sort_order")
+        .select("lesson_id, chinese, pinyin, english, word_type, sort_order, bangla")
         .in("lesson_id", lessonIds)
         .order("sort_order");
 
@@ -28,7 +28,7 @@ export const useHskLessons = (level: number) => {
       const vocabMap = new Map<string, VocabWord[]>();
       (vocab || []).forEach((v) => {
         const arr = vocabMap.get(v.lesson_id) || [];
-        arr.push({ chinese: v.chinese, pinyin: v.pinyin, english: v.english, type: v.word_type });
+        arr.push({ chinese: v.chinese, pinyin: v.pinyin, english: v.english, type: v.word_type, bangla: v.bangla || undefined });
         vocabMap.set(v.lesson_id, arr);
       });
 
@@ -129,6 +129,7 @@ export const useHskLessonDetail = (level: number, lessonNumber: number) => {
           pinyin: v.pinyin,
           english: v.english,
           type: v.word_type,
+          bangla: v.bangla || undefined,
         })) as VocabWord[],
         grammar: (grammarRes.data || []).map((g) => ({
           structure: g.structure,

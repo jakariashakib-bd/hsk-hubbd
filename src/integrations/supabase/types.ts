@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       dialogues: {
         Row: {
+          bangla: string | null
           chinese: string
           english: string
           id: string
@@ -25,6 +26,7 @@ export type Database = {
           speaker: string
         }
         Insert: {
+          bangla?: string | null
           chinese: string
           english: string
           id?: string
@@ -34,6 +36,7 @@ export type Database = {
           speaker: string
         }
         Update: {
+          bangla?: string | null
           chinese?: string
           english?: string
           id?: string
@@ -60,6 +63,7 @@ export type Database = {
           lesson_id: string
           options: Json | null
           question: string
+          question_bangla: string | null
           sort_order: number
         }
         Insert: {
@@ -69,6 +73,7 @@ export type Database = {
           lesson_id: string
           options?: Json | null
           question: string
+          question_bangla?: string | null
           sort_order?: number
         }
         Update: {
@@ -78,6 +83,7 @@ export type Database = {
           lesson_id?: string
           options?: Json | null
           question?: string
+          question_bangla?: string | null
           sort_order?: number
         }
         Relationships: [
@@ -92,30 +98,36 @@ export type Database = {
       }
       grammar_points: {
         Row: {
+          example_bangla: string | null
           example_chinese: string
           example_english: string
           example_pinyin: string
           explanation: string
+          explanation_bangla: string | null
           id: string
           lesson_id: string
           sort_order: number
           structure: string
         }
         Insert: {
+          example_bangla?: string | null
           example_chinese: string
           example_english: string
           example_pinyin: string
           explanation: string
+          explanation_bangla?: string | null
           id?: string
           lesson_id: string
           sort_order?: number
           structure: string
         }
         Update: {
+          example_bangla?: string | null
           example_chinese?: string
           example_english?: string
           example_pinyin?: string
           explanation?: string
+          explanation_bangla?: string | null
           id?: string
           lesson_id?: string
           sort_order?: number
@@ -247,6 +259,7 @@ export type Database = {
       }
       reading_practice: {
         Row: {
+          bangla: string | null
           chinese: string
           english: string
           id: string
@@ -254,6 +267,7 @@ export type Database = {
           pinyin: string
         }
         Insert: {
+          bangla?: string | null
           chinese: string
           english: string
           id?: string
@@ -261,6 +275,7 @@ export type Database = {
           pinyin: string
         }
         Update: {
+          bangla?: string | null
           chinese?: string
           english?: string
           id?: string
@@ -321,6 +336,7 @@ export type Database = {
       }
       vocabulary: {
         Row: {
+          bangla: string | null
           chinese: string
           english: string
           id: string
@@ -330,6 +346,7 @@ export type Database = {
           word_type: string
         }
         Insert: {
+          bangla?: string | null
           chinese: string
           english: string
           id?: string
@@ -339,6 +356,7 @@ export type Database = {
           word_type?: string
         }
         Update: {
+          bangla?: string | null
           chinese?: string
           english?: string
           id?: string

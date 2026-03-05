@@ -3,6 +3,7 @@ export interface VocabWord {
   pinyin: string;
   english: string;
   type: string;
+  bangla?: string;
 }
 
 export interface LessonData {
