@@ -7,7 +7,8 @@ const exams = [
   { level: 2, label: "Basic", color: "bg-card-salmon", icon: "📦", time: "55 mins", questions: 60 },
   { level: 3, label: "Intermediate", color: "bg-card-gold", icon: "📖", time: "90 mins", questions: 80 },
   { level: 4, label: "Advanced", color: "bg-card-coral", icon: "🔥", time: "105 mins", questions: 100 },
-  { level: 5, label: "Fluent", color: "bg-card-teal", icon: "👑", time: "120 mins", questions: 45 },
+  { level: 5, label: "Fluent", color: "bg-card-teal", icon: "👑", time: "120 mins", questions: 100 },
+  { level: 6, label: "Mastery", color: "bg-card-purple", icon: "🐉", time: "140 mins", questions: 101 },
 ];
 
 const MockTestPage = () => {
