@@ -1,5 +1,5 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, BookOpen, Edit3, Trophy, MessageCircle, ClipboardList, Shield, LogOut, LogIn } from "lucide-react";
+import { LayoutDashboard, BookOpen, Edit3, Trophy, ClipboardList, Shield, LogOut, LogIn } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
@@ -14,7 +14,7 @@ const studyItems = [
 
 const socialItems = [
   { to: "/progress", icon: Trophy, label: "Progress" },
-  { to: "/community", icon: MessageCircle, label: "HSK Talk", badge: true },
+  { to: "/pinyin-dictionary", icon: BookOpen, label: "Pinyin Dictionary" },
 ];
 
 const SidebarLink = ({ to, icon: Icon, label, badge }: { to: string; icon: any; label: string; badge?: boolean }) => {
