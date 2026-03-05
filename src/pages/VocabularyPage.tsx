@@ -1,23 +1,46 @@
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
 import Breadcrumb from "@/components/Breadcrumb";
-
-const wordCounts: Record<string, number> = {
-  hsk1: 150, hsk2: 300, hsk3: 600, hsk4: 1200, hsk5: 1338,
-};
+import { useHskWritingVocab } from "@/hooks/useHskPracticeData";
+import FlashcardSession from "@/components/FlashcardSession";
 
 const batchOptions = [
-  { count: "10", label: "Quick Review" },
-  { count: "20", label: "Recommended" },
-  { count: "50", label: "Deep Dive" },
-  { count: "ALL", label: "Full Course" },
+  { count: 10, label: "Quick Review" },
+  { count: 20, label: "Recommended" },
+  { count: 50, label: "Deep Dive" },
+  { count: "ALL" as const, label: "Full Course" },
 ];
 
 const VocabularyPage = () => {
   const { level } = useParams();
   const lvl = level || "hsk1";
-  const totalWords = wordCounts[lvl] || 150;
+  const levelNum = parseInt(lvl.replace("hsk", ""));
+  const { data: vocab, isLoading } = useHskWritingVocab(levelNum);
+  const [sessionBatch, setSessionBatch] = useState<number | "ALL" | null>(null);
+
+  const totalWords = vocab?.length || 0;
+
+  if (sessionBatch !== null && vocab && vocab.length > 0) {
+    return (
+      <div className="max-w-5xl mx-auto">
+        <Breadcrumb
+          items={[
+            { label: "Dashboard", to: "/" },
+            { label: "Study", to: "/course" },
+            { label: lvl.toUpperCase(), to: `/course/${lvl}` },
+            { label: "Flashcards" },
+          ]}
+        />
+        <FlashcardSession
+          vocab={vocab}
+          batchSize={sessionBatch}
+          onExit={() => setSessionBatch(null)}
+          levelLabel={lvl.toUpperCase()}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -41,7 +64,7 @@ const VocabularyPage = () => {
           </h1>
 
           <div className="mt-4 inline-block retro-tag text-secondary border-secondary">
-            LEVEL: {lvl.toUpperCase()} // STATUS: READY
+            LEVEL: {lvl.toUpperCase()} // STATUS: {isLoading ? "LOADING" : "READY"}
           </div>
 
           <div className="grid grid-cols-2 gap-0 mt-6 brutalist-border rounded-lg overflow-hidden">
@@ -59,7 +82,7 @@ const VocabularyPage = () => {
         {/* Right: Start Session */}
         <div className="bg-secondary brutalist-card rounded-xl p-6 max-w-sm w-full">
           <div className="flex items-center gap-2 mb-4">
-            <span className="w-3 h-3 rounded-full bg-primary animate-pulse-glow" />
+            <span className="w-3 h-3 rounded-full bg-primary animate-pulse" />
             <h2 className="font-mono font-bold text-lg text-secondary-foreground">START SESSION _</h2>
           </div>
 
@@ -70,10 +93,12 @@ const VocabularyPage = () => {
           <div className="grid grid-cols-2 gap-3">
             {batchOptions.map((opt) => (
               <button
-                key={opt.count}
-                className="brutalist-card bg-card rounded-lg p-4 text-left hover:bg-muted transition-colors"
+                key={String(opt.count)}
+                onClick={() => setSessionBatch(opt.count)}
+                disabled={isLoading || totalWords === 0}
+                className="brutalist-card bg-card rounded-lg p-4 text-left hover:bg-muted transition-colors disabled:opacity-50"
               >
-                <p className="text-2xl font-bold font-mono text-foreground">{opt.count}</p>
+                <p className="text-2xl font-bold font-mono text-foreground">{opt.count === "ALL" ? "ALL" : opt.count}</p>
                 <p className="text-xs font-mono text-muted-foreground uppercase mt-1">{opt.label}</p>
               </button>
             ))}
