@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, Loader2 } from "lucide-react";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useHskLevelCounts } from "@/hooks/useHskData";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import UpgradeModal from "@/components/UpgradeModal";
 
 const courses = [
   { level: 1, label: "Beginner", sublabel: "Beginner Level", defaultWords: 300, color: "bg-card-mint", icon: "🏯", active: true },
@@ -14,6 +17,8 @@ const courses = [
 
 const CoursePage = () => {
   const { data: levelCounts, isLoading } = useHskLevelCounts();
+  const { canAccessLevel } = useUserPlan();
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -40,14 +45,31 @@ const CoursePage = () => {
           const lessonCount = levelCounts?.[c.level] || 0;
           const hasLessons = lessonCount > 0;
           const isActive = c.active && hasLessons;
+          const isLocked = !canAccessLevel(c.level);
+
+          const handleClick = (e: React.MouseEvent) => {
+            if (isLocked) {
+              e.preventDefault();
+              setShowUpgrade(true);
+            }
+          };
 
           return (
             <Link
               key={c.level}
               to={isActive ? `/course/hsk${c.level}` : "#"}
-              className={`${c.color} rounded-2xl p-6 brutalist-border hover:translate-x-[3px] hover:translate-y-[3px] transition-transform flex flex-col min-h-[280px] relative ${!isActive ? "opacity-60" : ""}`}
+              onClick={handleClick}
+              className={`${c.color} rounded-2xl p-6 brutalist-border hover:translate-x-[3px] hover:translate-y-[3px] transition-transform flex flex-col min-h-[280px] relative ${!isActive || isLocked ? "opacity-60" : ""}`}
             >
-              {isActive && (
+              {isLocked && (
+                <div className="absolute inset-0 bg-foreground/5 rounded-2xl flex flex-col items-center justify-center z-10">
+                  <Lock size={32} className="text-foreground/40 mb-2" />
+                  <span className="text-xs font-mono text-foreground/50 text-center px-4">
+                    Upgrade to Pro to unlock
+                  </span>
+                </div>
+              )}
+              {isActive && !isLocked && (
                 <span className="absolute top-4 right-4 text-xs font-mono bg-foreground/10 px-2 py-1 rounded-full text-foreground/60 brutalist-border">
                   {lessonCount} LESSONS
                 </span>
@@ -64,7 +86,7 @@ const CoursePage = () => {
               </div>
 
               <div className="mt-auto">
-                {isActive ? (
+                {isActive && !isLocked ? (
                   <div className="text-5xl mb-3 opacity-50">{c.icon}</div>
                 ) : (
                   <div className="flex justify-center mb-3">
@@ -86,6 +108,8 @@ const CoursePage = () => {
           );
         })}
       </div>
+
+      <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} />
     </div>
   );
 };

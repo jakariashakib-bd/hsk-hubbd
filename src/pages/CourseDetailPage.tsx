@@ -1,6 +1,8 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useCallback, useMemo } from "react";
-import { Volume2, BookOpen, Headphones, Code2, Pen, Globe, Brain, Settings2, CheckCircle2, RotateCcw, ChevronLeft, ChevronRight, Shuffle, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Volume2, BookOpen, Headphones, Code2, Pen, Globe, Brain, Settings2, CheckCircle2, RotateCcw, ChevronLeft, ChevronRight, Shuffle, Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import UpgradeModal from "@/components/UpgradeModal";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useCompletedLessons } from "@/hooks/useCompletedLessons";
 import { useHskLessons } from "@/hooks/useHskData";
@@ -463,11 +465,30 @@ const AllExercisesTab = ({ lessons }: { lessons: LessonData[] }) => {
 // ====== MAIN PAGE ======
 const CourseDetailPage = () => {
   const { level } = useParams();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("lessons");
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const course = courseData[level || "hsk1"] || courseData.hsk1;
   const levelNum = parseInt((level || "hsk1").replace("hsk", ""));
+  const { canAccessLevel } = useUserPlan();
   const { data: lessons = [], isLoading, error } = useHskLessons(levelNum);
   const hasData = lessons.length > 0;
+  const isLocked = !canAccessLevel(course.level);
+
+  if (isLocked) {
+    return (
+      <div className="max-w-3xl mx-auto">
+        <Breadcrumb items={[{ label: "Dashboard", to: "/" }, { label: "Study", to: "/course" }, { label: `HSK${course.level}` }]} />
+        <div className="brutalist-card rounded-2xl bg-card p-12 mt-6 text-center">
+          <Lock size={48} className="mx-auto text-primary mb-4" />
+          <h1 className="text-3xl font-bold mb-2">HSK {course.level} — Locked</h1>
+          <p className="text-muted-foreground mb-6">Upgrade to Pro to unlock HSK 3–6 lessons and full mock tests.</p>
+          <button onClick={() => setShowUpgrade(true)} className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-bold brutalist-border hover:opacity-90 transition-opacity">Upgrade to Pro</button>
+        </div>
+        <UpgradeModal open={showUpgrade} onOpenChange={setShowUpgrade} />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto">
