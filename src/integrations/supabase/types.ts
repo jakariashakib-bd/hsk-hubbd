@@ -158,6 +158,63 @@ export type Database = {
         }
         Relationships: []
       }
+      mock_test_questions: {
+        Row: {
+          chinese_text: string | null
+          correct_answer: string
+          created_at: string
+          explanation: string | null
+          id: string
+          level: number
+          options: Json | null
+          part: string
+          passage: string | null
+          pinyin_text: string | null
+          question: string
+          question_number: number
+          question_type: string
+          section: string
+          sort_order: number
+          test_number: number
+        }
+        Insert: {
+          chinese_text?: string | null
+          correct_answer: string
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          level: number
+          options?: Json | null
+          part: string
+          passage?: string | null
+          pinyin_text?: string | null
+          question: string
+          question_number: number
+          question_type: string
+          section: string
+          sort_order?: number
+          test_number?: number
+        }
+        Update: {
+          chinese_text?: string | null
+          correct_answer?: string
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          level?: number
+          options?: Json | null
+          part?: string
+          passage?: string | null
+          pinyin_text?: string | null
+          question?: string
+          question_number?: number
+          question_type?: string
+          section?: string
+          sort_order?: number
+          test_number?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
