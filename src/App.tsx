@@ -25,6 +25,7 @@ import AdminVocabulary from "./pages/admin/AdminVocabulary";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminGuard from "./components/AdminGuard";
+import PricingPage from "./pages/PricingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
               <Route path="/pinyin-dictionary" element={<PinyinDictionaryPage />} />
               <Route path="/mock-test" element={<MockTestPage />} />
               <Route path="/mock-test/:level" element={<MockTestTakingPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
               <Route path="/admin/users" element={<AdminGuard><AdminUsers /></AdminGuard>} />

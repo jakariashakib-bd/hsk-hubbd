@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +7,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Lock, Crown, Sparkles } from "lucide-react";
+import { Crown, Sparkles } from "lucide-react";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -14,6 +15,13 @@ interface UpgradeModalProps {
 }
 
 const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
+  const navigate = useNavigate();
+
+  const handleUpgrade = () => {
+    onOpenChange(false);
+    navigate("/pricing");
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md brutalist-border">
@@ -50,9 +58,9 @@ const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
 
         <Button
           className="w-full h-12 text-lg font-bold brutalist-border"
-          onClick={() => onOpenChange(false)}
+          onClick={handleUpgrade}
         >
-          <Lock size={18} className="mr-2" />
+          <Crown size={18} className="mr-2" />
           Upgrade to Pro
         </Button>
         <p className="text-xs text-center text-muted-foreground">
