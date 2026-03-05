@@ -13,7 +13,7 @@ const AdminGuard = ({ children }: { children: ReactNode }) => {
     );
   }
 
-  if (!user) return <Navigate to="/auth" replace />;
+  if (!user) return <Navigate to="/admin/login" replace />;
   if (!isAdmin) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">

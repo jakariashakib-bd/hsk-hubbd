@@ -24,6 +24,7 @@ import AdminLessons from "./pages/admin/AdminLessons";
 import AdminVocabulary from "./pages/admin/AdminVocabulary";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import AdminGuard from "./components/AdminGuard";
 import PricingPage from "./pages/PricingPage";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route element={<AppLayout />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/course" element={<CoursePage />} />
