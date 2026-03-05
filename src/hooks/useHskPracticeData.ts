@@ -124,7 +124,7 @@ export const useHskWritingVocab = (level: number) => {
       const ids = lessons.map((l) => l.id);
       const { data, error } = await supabase
         .from("vocabulary")
-        .select("chinese, pinyin, english")
+        .select("chinese, pinyin, english, bangla")
         .in("lesson_id", ids)
         .order("sort_order");
       if (error) throw error;

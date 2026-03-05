@@ -5,6 +5,7 @@ interface VocabWord {
   chinese: string;
   pinyin: string;
   english: string;
+  bangla?: string;
 }
 
 interface Props {
@@ -126,6 +127,7 @@ const FlashcardSession = ({ vocab, batchSize, onExit, levelLabel }: Props) => {
             <p className="text-4xl font-bold mb-2">{current.chinese}</p>
             <p className="text-lg text-accent font-mono">/{current.pinyin}/</p>
             <p className="text-lg text-muted-foreground mt-2">{current.english}</p>
+            {current.bangla && <p className="text-base text-accent mt-1">{current.bangla}</p>}
           </>
         )}
       </div>

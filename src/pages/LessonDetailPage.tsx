@@ -43,6 +43,7 @@ const VocabularyTab = ({ vocab, showPinyin, setShowPinyin }: { vocab: VocabWord[
           </div>
           <div className="text-right shrink-0">
             <p className="font-medium text-sm">{word.english}</p>
+            {word.bangla && <p className="text-xs text-accent font-medium">{word.bangla}</p>}
             <p className="text-xs text-muted-foreground uppercase font-mono">{word.type}</p>
           </div>
           <button onClick={() => speakChinese(word.chinese)} className="ml-4 w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-foreground/10 transition-colors shrink-0"><Volume2 size={14} /></button>
@@ -105,6 +106,7 @@ const ListeningTab = ({ vocab }: { vocab: VocabWord[] }) => {
             <p className="text-3xl font-bold">{word.chinese}</p>
             <p className="text-sm text-muted-foreground">{word.pinyin}</p>
             <p className="text-sm font-medium mt-1">{word.english}</p>
+            {word.bangla && <p className="text-sm text-accent">{word.bangla}</p>}
           </div>
         ) : (
           <button onClick={() => setShowAnswer(true)} className="mt-6 retro-tag text-primary border-primary cursor-pointer hover:bg-primary/10 transition-colors">Reveal Answer</button>
@@ -167,6 +169,7 @@ const CharactersTab = ({ vocab }: { vocab: VocabWord[] }) => (
           <p className="text-5xl font-bold mb-3">{word.chinese}</p>
           <p className="text-sm text-muted-foreground">{word.pinyin}</p>
           <p className="text-xs text-muted-foreground mt-1">{word.english}</p>
+          {word.bangla && <p className="text-xs text-accent mt-0.5">{word.bangla}</p>}
           <div className="mt-3 flex items-center justify-center gap-2">
             <span className="retro-tag text-xs border-muted-foreground/30 text-muted-foreground">{word.chinese.length} strokes est.</span>
             <button onClick={() => speakChinese(word.chinese)} className="w-7 h-7 rounded-full bg-muted flex items-center justify-center hover:bg-foreground/10 transition-colors"><Volume2 size={12} /></button>
@@ -278,7 +281,7 @@ const FlashcardsTab = ({ vocab }: { vocab: VocabWord[] }) => {
         {!flipped ? (
           <><p className="text-6xl font-bold mb-4">{card.chinese}</p><p className="text-sm text-muted-foreground font-mono">Click to reveal</p></>
         ) : (
-          <><p className="text-4xl font-bold mb-2">{card.chinese}</p><p className="text-lg text-muted-foreground">{card.pinyin}</p><p className="text-lg font-medium mt-2">{card.english}</p><p className="text-xs text-muted-foreground uppercase font-mono mt-1">{card.type}</p></>
+          <><p className="text-4xl font-bold mb-2">{card.chinese}</p><p className="text-lg text-muted-foreground">{card.pinyin}</p><p className="text-lg font-medium mt-2">{card.english}</p>{card.bangla && <p className="text-base text-accent mt-1">{card.bangla}</p>}<p className="text-xs text-muted-foreground uppercase font-mono mt-1">{card.type}</p></>
         )}
       </div>
       <div className="flex items-center justify-center gap-3 mt-4">
