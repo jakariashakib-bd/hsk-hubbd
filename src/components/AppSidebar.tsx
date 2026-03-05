@@ -1,6 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, BookOpen, Edit3, Trophy, ClipboardList, Shield, LogOut, LogIn } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import hskhubLogo from "@/assets/hskhub-logo.png";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -43,11 +44,12 @@ const AppSidebar = () => {
 
   return (
     <aside className="w-56 min-h-screen bg-primary flex flex-col p-4 fixed left-0 top-0 z-40">
-      <div className="flex items-center gap-3 px-2 py-4 mb-4">
-        <div className="w-10 h-10 rounded-xl bg-sidebar-foreground/20 flex items-center justify-center brutalist-border border-sidebar-foreground/30">
-          <span className="text-sidebar-foreground font-bold text-lg font-mono">H</span>
-        </div>
-        <span className="text-sidebar-foreground font-bold text-lg tracking-tight">HSK Hub</span>
+      <div className="flex items-center justify-center px-2 py-4 mb-4">
+        <img
+          src={hskhubLogo}
+          alt="HSK Hub"
+          className="h-10 w-auto brightness-0 invert"
+        />
       </div>
 
       <nav className="flex flex-col gap-1">
