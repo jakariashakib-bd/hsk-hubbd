@@ -1,6 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, BookOpen, Edit3, Trophy, ClipboardList, Shield, LogOut, LogIn } from "lucide-react";
+import { LayoutDashboard, BookOpen, Edit3, Trophy, ClipboardList, Shield, LogOut, LogIn, Sun, Moon } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useTheme";
 import hskhubLogo from "@/assets/hskhub-logo.png";
 
 const navItems = [
@@ -40,6 +41,7 @@ const SidebarLink = ({ to, icon: Icon, label, badge }: { to: string; icon: any; 
 
 const AppSidebar = () => {
   const { user, isAdmin, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   return (
@@ -70,8 +72,21 @@ const AppSidebar = () => {
         </nav>
       </div>
 
+      <div className="mt-6">
+        <p className="text-sidebar-foreground/50 text-xs font-mono uppercase tracking-wider px-4 mb-2">Settings</p>
+        <nav className="flex flex-col gap-1">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground w-full"
+          >
+            {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+            <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+          </button>
+        </nav>
+      </div>
+
       {isAdmin && (
-        <div className="mt-6">
+        <div className="mt-4">
           <p className="text-sidebar-foreground/50 text-xs font-mono uppercase tracking-wider px-4 mb-2">Admin</p>
           <nav className="flex flex-col gap-1">
             <SidebarLink to="/admin" icon={Shield} label="Admin Panel" />
