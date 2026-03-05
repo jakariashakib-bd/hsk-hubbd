@@ -12,6 +12,10 @@ import LessonDetailPage from "./pages/LessonDetailPage";
 import PracticePage from "./pages/PracticePage";
 import VocabularyPage from "./pages/VocabularyPage";
 import ListeningPage from "./pages/ListeningPage";
+import GrammarPracticePage from "./pages/GrammarPracticePage";
+import ListeningPracticePage from "./pages/ListeningPracticePage";
+import ReadingPracticePage from "./pages/ReadingPracticePage";
+import WritingPracticePage from "./pages/WritingPracticePage";
 import ProgressPage from "./pages/ProgressPage";
 import CommunityPage from "./pages/CommunityPage";
 import PinyinDictionaryPage from "./pages/PinyinDictionaryPage";
@@ -48,7 +52,10 @@ const App = () => (
               <Route path="/course/:level" element={<CourseDetailPage />} />
               <Route path="/course/:level/lesson/:lessonId" element={<LessonDetailPage />} />
               <Route path="/course/:level/vocabulary" element={<VocabularyPage />} />
-              <Route path="/course/:level/grammar" element={<VocabularyPage />} />
+              <Route path="/course/:level/grammar" element={<GrammarPracticePage />} />
+              <Route path="/course/:level/listening" element={<ListeningPracticePage />} />
+              <Route path="/course/:level/reading" element={<ReadingPracticePage />} />
+              <Route path="/course/:level/writing" element={<WritingPracticePage />} />
               <Route path="/practice" element={<PracticePage />} />
               <Route path="/listening" element={<ListeningPage />} />
               <Route path="/progress" element={<ProgressPage />} />
